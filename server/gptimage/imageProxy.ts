@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { Plugin } from 'vite'
 
 export const imageProxyPath = '/api/gptimage/generations'
+export const imageEditProxyPath = '/api/gptimage/edits'
 
 /** 接收响应、状态码及错误说明；发送 JSON 错误，无返回值。 */
 function sendError(response: ServerResponse, status: number, message: string) {
@@ -37,6 +38,8 @@ export async function forwardImageRequest(
     return
   }
   let endpoint: URL
+  const operation =
+    request.url?.split('?')[0] === imageEditProxyPath ? 'edits' : 'generations'
   try {
     const target = request.headers['x-gptimage-endpoint']
     if (typeof target !== 'string') throw new Error('Missing endpoint')
@@ -47,7 +50,7 @@ export async function forwardImageRequest(
       endpoint.password ||
       endpoint.search ||
       endpoint.hash ||
-      !endpoint.pathname.endsWith('/images/generations')
+      !endpoint.pathname.endsWith(`/images/${operation}`)
     )
       throw new Error('Invalid endpoint')
   } catch {
@@ -66,8 +69,8 @@ export async function forwardImageRequest(
     for await (const chunk of request) {
       const bytes = Buffer.from(chunk)
       length += bytes.length
-      if (length > 256 * 1024) {
-        sendError(response, 413, '图片描述过长，请缩短后重试')
+      if (length > (operation === 'edits' ? 32 * 1024 * 1024 : 256 * 1024)) {
+        sendError(response, 413, '提交内容过大，请减少参考图或缩短描述后重试')
         return
       }
       chunks.push(bytes)
@@ -118,7 +121,12 @@ export function imageProxyPlugin(): Plugin {
       server.middlewares.use(
         /** 接收请求、响应和后续处理器；处理匹配端点，其他请求继续传递，无返回值。 */
         (request, response, next) => {
-          if (request.url?.split('?')[0] !== imageProxyPath) return next()
+          if (
+            ![imageProxyPath, imageEditProxyPath].includes(
+              request.url?.split('?')[0] || '',
+            )
+          )
+            return next()
           void forwardImageRequest(request, response)
         },
       )

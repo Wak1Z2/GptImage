@@ -104,6 +104,48 @@ async function verifyForwarding() {
 }
 test('本地 HTTP 代理转发到无 CORS 支持的上游并返回图片', verifyForwarding)
 
+/** 无参数；验证多图 JSON 编辑请求超过旧限制后仍可原样转发，返回异步测试完成状态。 */
+async function verifyEditForwarding() {
+  const body = JSON.stringify({
+    model: 'gpt-image-1',
+    prompt: '融合两张图',
+    n: 1,
+    images: [
+      { image_url: `data:image/png;base64,${'a'.repeat(300 * 1024)}` },
+      { image_url: 'https://example.com/reference.png' },
+    ],
+  })
+  const response = await fetch(`${proxyUrl}/api/gptimage/edits`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer test-key',
+      Origin: proxyUrl,
+      'X-GptImage-Endpoint': `${upstreamUrl}/custom/v1/images/edits`,
+    },
+    body,
+  })
+  expect(response.status).toBe(200)
+  expect(received).toEqual({
+    path: '/custom/v1/images/edits',
+    authorization: 'Bearer test-key',
+    body,
+  })
+}
+test('多图编辑请求原样转发且支持图片请求大小', verifyEditForwarding)
+
+/** 无参数；验证编辑路由拒绝转发到生成端点，返回异步测试完成状态。 */
+async function verifyMismatchedRoute() {
+  const response = await fetch(`${proxyUrl}/api/gptimage/edits`, {
+    method: 'POST',
+    headers: { 'X-GptImage-Endpoint': `${upstreamUrl}/images/generations` },
+    body: '{}',
+  })
+  expect(response.status).toBe(400)
+  expect(received).toEqual({})
+}
+test('拒绝编辑路由与上游操作不匹配的请求', verifyMismatchedRoute)
+
 /** 无参数；验证保留上游鉴权失败状态，返回异步完成状态。 */
 async function verifyUpstreamError() {
   const response = await requestImage({ Authorization: 'Bearer invalid' })
