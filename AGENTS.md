@@ -53,6 +53,17 @@ Use Node.js 24 LTS and npm 11+. Install dependencies with `npm ci`, start develo
 
 Use strict TypeScript, React function components, ESLint, and Prettier. Format with `npm run format`: two-space indentation, single quotes, and no semicolons. Use PascalCase component names and descriptive camelCase function names. Avoid competing style tools or unrelated formatting changes.
 
+## UI 与动画规范（强制）
+
+- 所有新增或修改的界面必须使用项目现有的 Ant Design UI 框架，交互控件优先直接使用其组件及组合方式。禁止引入其他 UI 框架，禁止在已有对应组件时手写替代控件。语义化 HTML 可用于页面结构，局部 CSS 仅补充布局与必要的视觉细节。
+- 不得把浏览器默认样式的文件选择器、按钮、输入框、复选框等直接展示给用户。文件上传必须使用 `Upload` / `Upload.Dragger`，按钮、表单、选择、反馈与图片预览分别使用对应的 Ant Design 组件；底层原生 input 只能作为框架组件封装的实现细节。
+- 修改界面前先查看现有页面、`src/app/` 的主题和样式，以及相关功能中的组件与动画用法。新区域必须延续现有的字号层级、间距、圆角、颜色、卡片与按钮风格，优先使用 Ant Design 的主题 token，兼容明暗主题，禁止另起一套视觉体系。
+- 使用框架组件只是最低要求。必须设计清晰的主次操作、对齐、分组和留白；上传区、缩略图、选中状态、移除操作及结果操作应形成完整一致的界面，禁止将原生控件、零散按钮和大段说明简单堆砌后视为完成。图片列表需保持缩略图尺寸和比例处理一致，长文件名不得撑破布局。
+- 应用自行添加的动画必须使用现有 Motion（`motion/react`），禁止引入其他动画库或用手写 CSS keyframes、定时器模拟同类交互动画。Ant Design 组件自带的动画保留，不叠加重复动效。
+- 列表加入与移除、布局变化、内容展开与结果出现等适合动画的状态变化，应使用简短、克制且一致的 Motion 过渡，按需使用 `AnimatePresence` 和布局动画，避免突兀跳变、夸张弹跳及无意义的循环动画。必须通过 `useReducedMotion` 或统一的 Motion 配置尊重减少动态效果偏好，减少或取消位移、缩放及布局动画。
+- 界面必须覆盖空状态、读取或生成中、成功、错误、禁用及选中状态，并保留键盘操作、可见焦点和可访问名称。窄屏下控件、图片与操作不得溢出或相互遮挡。
+- 涉及可见界面变化时，必须在浏览器中检查桌面与窄屏、明暗主题和关键交互状态，并检查动画及减少动态效果模式；提供截图用于审阅。构建与 jsdom 测试通过不能替代视觉验收。若环境无法执行浏览器检查，必须明确说明未验证的内容，不得声称视觉效果已验证。
+
 ## Code Simplicity & Documentation
 
 - Keep code concise and readable; avoid unnecessary logic and duplication.
