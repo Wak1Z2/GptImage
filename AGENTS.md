@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This workspace uses React, TypeScript, Vite, and Ant Design. Runtime code lives under `src/`, component tests under `tests/`, and static resources under `assets/` (Vite publicDir). Project configuration and the setup-focused `README.md` live at the repository root.
+This workspace uses React, TypeScript, Vite, Ant Design, and Motion (`motion/react`) for animations. Runtime code lives under `src/`, component tests under `tests/`, and static resources under `assets/` (Vite publicDir). Project configuration and the setup-focused `README.md` live at the repository root. Respect reduced-motion preferences when adding animations.
 
 ## Build, Test, and Development Commands
 
