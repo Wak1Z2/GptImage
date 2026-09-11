@@ -1,0 +1,10 @@
+.image-workspace {
+  align-items: start;
+}
+.clear-settings {
+  margin-bottom: 24px;
+}
+.generated-image {
+  max-width: 100%;
+  border-radius: 12px;
+}

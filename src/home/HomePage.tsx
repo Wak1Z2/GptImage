@@ -1,4 +1,5 @@
 import { Button, Card, Space, Tag, Typography } from 'antd'
+import './styles.css'
 
 /** 无 props；返回首页欢迎区与当前可用功能入口。 */
 export default function HomePage() {
@@ -36,6 +37,23 @@ export default function HomePage() {
             从这里进入每个功能页面
           </Typography.Text>
         </div>
+        <Card className="feature-card">
+          <div className="feature-card-content">
+            <div className="feature-symbol" aria-hidden="true">
+              GPT<span>↗</span>
+            </div>
+            <div className="feature-copy">
+              <Tag color="geekblue">AI 图片生成</Tag>
+              <Typography.Title level={3}>GPT Image</Typography.Title>
+              <Typography.Paragraph type="secondary">
+                连接你的模型服务，用文字生成图片。服务地址、密钥与模型名称自动保存在此浏览器。
+              </Typography.Paragraph>
+            </div>
+            <Button size="large" type="primary" href="#/gptimage">
+              进入 GPT Image →
+            </Button>
+          </div>
+        </Card>
         <Card className="feature-card">
           <div className="feature-card-content">
             <div className="feature-symbol" aria-hidden="true">

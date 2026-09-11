@@ -1,0 +1,137 @@
+.home-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  min-height: 380px;
+  padding: 40px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, #ebedff, #f1f7fd);
+  overflow: hidden;
+}
+.home-hero-copy {
+  position: relative;
+  z-index: 1;
+}
+.home-hero .ant-typography h1,
+.home-hero h1.ant-typography {
+  font-size: clamp(32px, 4vw, 48px);
+  letter-spacing: -1px;
+}
+.home-hero-copy .ant-btn {
+  margin-top: 20px;
+}
+.hero-art {
+  position: relative;
+  height: 290px;
+}
+.hero-orbit {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  border: 1px solid #bac2ef;
+  border-radius: 50%;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.hero-tile {
+  position: absolute;
+  width: 180px;
+  height: 220px;
+  left: 50%;
+  top: 30px;
+  border-radius: 24px;
+}
+.hero-tile-back {
+  transform: translateX(-35%) rotate(18deg);
+  background: #c3bcf5;
+}
+.hero-tile-front {
+  transform: translateX(-60%) rotate(-10deg);
+  background: linear-gradient(145deg, #7382f0, #494fbf);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 24px 48px #484caa33;
+}
+.hero-tile-front > span:first-child {
+  font-size: 100px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.hero-tile-caption {
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-top: 16px;
+}
+.hero-dot {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e8b978;
+  right: 15%;
+  bottom: 16px;
+}
+.home-features {
+  margin-top: 40px;
+}
+.feature-card + .feature-card {
+  margin-top: 20px;
+}
+.feature-card-content {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 12px;
+}
+.feature-symbol {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 16px;
+  background: #eceeff;
+  color: #5265e5;
+  font-size: 32px;
+  font-weight: 600;
+}
+.feature-symbol span {
+  font-size: 24px;
+}
+.feature-copy {
+  flex: 1;
+}
+.feature-copy .ant-typography {
+  margin-bottom: 0;
+}
+.feature-copy h3.ant-typography {
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+.app-shell-dark .home-hero {
+  background: linear-gradient(120deg, #202440, #1c2633);
+}
+.app-shell-dark .feature-symbol {
+  background: #292f50;
+  color: #a7b0ff;
+}
+@media (max-width: 760px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+    padding: 28px;
+  }
+  .hero-art {
+    height: 260px;
+    margin-top: 24px;
+  }
+  .feature-card-content {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0;
+  }
+}

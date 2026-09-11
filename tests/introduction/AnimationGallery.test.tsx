@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test } from 'vitest'
-import AnimationGallery from '../src/AnimationGallery'
+import AnimationGallery from '../../src/introduction/AnimationGallery'
 
 /** 验证反馈按钮与排序后的阅读顺序；无参数，返回异步测试结果。 */
 async function verifyAnimationControls() {

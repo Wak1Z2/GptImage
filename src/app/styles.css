@@ -1,0 +1,115 @@
+:root {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+}
+.app-shell {
+  min-height: 100dvh;
+  padding: 48px 24px;
+  background: #f5f7fa;
+}
+.app-shell-dark {
+  background: #101218;
+}
+.showcase {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.page-header,
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.gallery-grid > * {
+  min-width: 0;
+}
+.full-width {
+  width: 100%;
+}
+footer {
+  margin-top: 32px;
+  text-align: center;
+}
+@media (max-width: 760px) {
+  .app-shell {
+    padding: 24px 16px;
+  }
+  .page-header,
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+  .gallery-grid .ant-card-head-wrapper {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0;
+  }
+}
+
+.app-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #272d45;
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #5265e5;
+  color: white;
+}
+.intro-header {
+  margin-bottom: 24px;
+}
+.page-loading {
+  display: flex;
+  min-height: 300px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #687080;
+}
+.app-shell-dark .brand-link {
+  color: #e3e6f0;
+}
+@media (max-width: 760px) {
+  .app-nav {
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+}

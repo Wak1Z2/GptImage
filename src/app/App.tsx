@@ -1,13 +1,17 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { Button, ConfigProvider, Space, Spin, Typography, theme } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
-import HomePage from './HomePage'
+import HomePage from '../home/HomePage'
 
 /** 无参数；返回介绍页模块，按需加载示例及动画依赖。 */
-const IntroductionPage = lazy(() => import('./IntroductionPage'))
+const IntroductionPage = lazy(() => import('../introduction/IntroductionPage'))
+
+/** 无参数；返回按需加载的图片生成页模块。 */
+const GptImagePage = lazy(() => import('../gptimage/GptImagePage'))
 
 /** 无参数；返回 URL 对应的页面，未知地址回退首页。 */
 function currentPage() {
+  if (window.location.hash === '#/gptimage') return 'gptimage'
   return window.location.hash === '#/introduction' ? 'introduction' : 'home'
 }
 
@@ -48,7 +52,7 @@ export default function App() {
               <span className="brand-mark">G</span>GptImage
             </a>
             <Space wrap>
-              {page === 'introduction' && <Button href="#/">返回首页</Button>}
+              {page !== 'home' && <Button href="#/">返回首页</Button>}
               <Button onClick={toggleTheme}>
                 {dark ? '切换浅色主题' : '切换深色主题'}
               </Button>
@@ -58,11 +62,17 @@ export default function App() {
             fallback={
               <div className="page-loading" role="status">
                 <Spin />
-                <span>正在加载介绍页面…</span>
+                <span>正在加载页面…</span>
               </div>
             }
           >
-            {page === 'home' ? <HomePage /> : <IntroductionPage />}
+            {page === 'home' ? (
+              <HomePage />
+            ) : page === 'gptimage' ? (
+              <GptImagePage />
+            ) : (
+              <IntroductionPage />
+            )}
           </Suspense>
           <footer>
             <Typography.Text type="secondary">

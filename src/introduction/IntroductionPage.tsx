@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Alert, Button, Card, Modal, Space, Tag, Typography } from 'antd'
 import ComponentGallery from './ComponentGallery'
 import AnimationGallery from './AnimationGallery'
+import './styles.css'
 
 /** 无 props；返回合并的 UI 组件与动画介绍页面。 */
 export default function IntroductionPage() {

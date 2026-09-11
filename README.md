@@ -1,6 +1,6 @@
 # GptImage
 
-基于 React、TypeScript、Vite、Ant Design 和 Motion 的前端项目。首页集中展示功能入口，目前提供一个合并的组件与动画介绍页面。
+基于 React、TypeScript、Vite、Ant Design 和 Motion 的前端项目。首页提供 GPT Image 图片生成及组件与动画介绍入口。
 
 ## 页面与功能
 
@@ -13,7 +13,18 @@
 - Motion 动画：依次入场（支持重播）、悬停与按压、列表重排、拖拽回弹、展开与退出。使用 `motion/react`，遵循系统的减少动态效果偏好。
 - 明暗主题：通过顶部按钮切换，页面导航时保留，刷新后恢复浅色。
 
-目前为前端演示，不包含图片生成接口或后端服务。
+### GPT Image 图片生成
+
+首页点击“进入 GPT Image”，或直接访问 `#/gptimage`。填写 Base URL、API Key、模型名称和图片描述后点击“生成图片”，结果支持放大预览。
+
+- Base URL 默认为 `https://api.openai.com/v1`；裸域名会补充 `/v1`，自定义路径会保留，并追加 `/images/generations`。不要填写完整生成端点、查询参数或 URL 片段。
+- 模型名称可自由填写 GPT Image 系列名称或服务商的模型别名，默认为 `gpt-image-1`。
+- Base URL、API Key、模型名称修改后自动保存至当前站点的 `localStorage`，刷新或下次进入会自动回填。API Key 以明文缓存，仅在可信设备使用；“清除缓存配置”可删除三项缓存并恢复默认值。提示词和生成图片不持久化。
+- 服务需兼容 [OpenAI 图片生成接口](https://developers.openai.com/api/reference/resources/images/methods/generate)。`npm run dev` 下浏览器请求同源 `/api/gptimage/generations`，由本机 Vite 服务转发到填写的 Base URL，解决浏览器跨域限制；密钥仅随请求转发，不写入服务端文件或日志。开发代理只允许本机访问。
+- 构建后的静态页面（包括 `npm run preview`）仍直接请求模型服务，需要上游允许 CORS（包含 Authorization 和 Content-Type 请求头）；HTTPS 页面应连接 HTTPS 服务。开发代理不会打包到静态资源中。
+- 页面处理生成中、接口失败、网络失败、空结果与存储不可用状态；离开页面会取消浏览器请求，但服务端可能仍继续生成。
+
+项目包含本机开发代理，不包含生产后端服务。
 
 ## 运行环境
 
@@ -28,6 +39,18 @@ npm run dev
 ```
 
 打开终端显示的本地地址，默认是 http://localhost:5173。
+
+如果模型服务需要通过本地网络代理访问，在 PowerShell 中设置后启动开发服务（Node.js 24.5 或以上）：
+
+```powershell
+$env:NODE_USE_ENV_PROXY = '1'
+$env:HTTP_PROXY = 'http://127.0.0.1:7897'
+$env:HTTPS_PROXY = 'http://127.0.0.1:7897'
+$env:NO_PROXY = 'localhost,127.0.0.1,::1'
+npm run dev
+```
+
+更改环境变量后需重启开发服务。本地转发失败返回 502，超过十分钟返回 504，上游鉴权等错误保留原始状态码。
 
 ## 检查与构建
 
@@ -49,16 +72,18 @@ npm run preview
 
 ## 目录
 
-- `src/`：React 入口、页面及样式
-- `src/App.tsx`：共享主题、导航与页面按需加载
-- `src/HomePage.tsx`：首页与功能入口
-- `src/IntroductionPage.tsx`：合并的组件与动画介绍页
-- `src/ComponentGallery.tsx`：表单与表格示例
-- `src/AnimationGallery.tsx`：Motion 动画实验室
-- `tests/`：组件测试及测试初始化
+- `src/main.tsx`：React 入口
+- `src/app/`：应用壳、共享主题、导航、页面按需加载及全局样式
+- `src/home/`：首页与功能入口
+- `src/gptimage/`：图片生成页面、配置缓存、接口调用与预览
+- `src/introduction/`：组件与动画介绍页、表单表格示例及 Motion 动画实验室
+- `server/gptimage/`：仅在开发模式启用的本机图片请求转发
+- `tests/`：按 `app/`、`gptimage/`、`introduction/`、`server/gptimage/` 对应组织测试，公共初始化位于 `tests/setup.ts`
 - `assets/`：原样复制到构建目录的静态资源，通过 `/文件名` 引用
 - 根目录：Vite、TypeScript、ESLint、Prettier 配置
 
+各功能的专用样式保留在对应目录的 `styles.css`，全局布局和主题样式位于 `src/app/styles.css`。仅在存在实际跨功能复用时创建 `src/shared/`。
+
 ## 配置
 
-当前无需环境变量。不要在前端代码或 `VITE_*` 环境变量中存放 API 密钥，浏览器资源对用户可见；需要私密凭据的接口应由后端调用。
+当前无需环境变量。用户在生成页填写自己的服务配置。不要在前端代码或 `VITE_*` 环境变量中存放 API 密钥；部署方的私密凭据应由后端管理。
